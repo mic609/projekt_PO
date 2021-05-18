@@ -5,11 +5,16 @@ class Human:
         self.age = age
         self.health_points = health_points
 
-    def
+    def reduce_health_bar(self, n):
+        self.health_points -= n
 
     def who_am_i(self):
         print(f"My (x,y) = ({self.x_coordinate}, {self.y_coordinate}), age = {self.age}, hp = {self.health_points}")
 
 
 human1 = Human(100, 20, 40)
+human2 = Human(80, 30, 70)
 human1.who_am_i()
+human1.reduce_health_bar(10)
+human1.who_am_i()
+human2.who_am_i()
