@@ -149,8 +149,3 @@ class Human(MoveableObject):
     #     return super()._x_move_to
     # def y_move(self):
     #     return super()._y_move_to
-
-ffields = [[Field(x, y) for y in range(10)] for x in range(10)]
-obj = Human(100, False, 0, random.randint(0, 100), False, ffields, 23)
-
-obj.move(ffields)
