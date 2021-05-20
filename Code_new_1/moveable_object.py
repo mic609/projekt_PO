@@ -3,10 +3,10 @@ import random
 
 class MoveableObject(ABC):
 
-    def __init__(self, ID):
-        self._x_cord = random.randint(0, 100)
-        self._y_cord = random.randint(0, 100)
-        self.change_cord(self._x_cord, self._y_cord)
+    def __init__(self, x, y, ID):
+        self._x_cord = -1
+        self._y_cord = -1
+        self.change_cord(x, y)
         self._ID = ID
         self._x_move_to = -1
         self._y_move_to = -1

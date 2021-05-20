@@ -4,6 +4,8 @@ from respirator import Respirator
 from virus import Virus
 from doctor import Doctor
 from chemist import Chemist
+from vaccine import Vaccine
+from medicine import Medicine
 import random
 
 class Board:
@@ -27,19 +29,19 @@ class Board:
         self.__vaccines = []
         self.__medicines = []
 
-        self.__ffields = [[Field(x, y) for y in range(self.__xsize)] for x in range(self.__ysize)]
+        self.__ffields = [[Field(x, y, self.__xsize, self.__ysize) for y in range(self.__xsize)] for x in range(self.__ysize)]
 
         for x in range(self.__human_num):
-            self.__humans.append(Human(100, False, 0, random.randint(0, 100), False, self.__ffields, x))  # Tutaj powstają obiekty klasy człowiek
+            self.__humans.append(Human(100, False, 0, random.randint(0, 100), False, self.__ffields, x, self.__xsize, self.__ysize))  # Tutaj powstają obiekty klasy człowiek
 
         for x in range(self.__virus_num):
-            self.__viruses.append(Virus(self.__ffields, x))
+            self.__viruses.append(Virus(self.__ffields, x, self.__xsize, self.__ysize))
 
         for x in range(self.__doctor_num):
-            self.__doctors.append(Doctor(self.__ffields, x))
+            self.__doctors.append(Doctor(self.__ffields, x, self.__xsize, self.__ysize))
 
         for x in range(self.__chemist_num):
-            self.__chemists.append(Chemist(self.__ffields, x))
+            self.__chemists.append(Chemist(self.__ffields, x, self.__xsize, self.__ysize))
 
         for x in range(self.__respirator_num):
             self.__respirators.append(Respirator(False, self.__xsize, self.__ysize, x, self.__ffields))  # Respirator false - nie jest nikt do niego podłączony
@@ -87,24 +89,25 @@ class Board:
                 self.__humans[i].reduce_health(cell)
 
                 # krok 3: Czlowiek sprawdza czy moze wejsc z jakims obiektem w interakcje
-                self.__humans[i].interaction(cell, self.__humans, self.__viruses, self.__doctors, self.__respirators)
+                self.__humans[i].interaction(cell, self.__humans, self.__viruses, self.__doctors, self.__respirators, self.__vaccines, self.__medicines)
 
         self.show_cycle() # Opcjonalnie
 
         for i in range(self.__virus_num):
             if self.__viruses[i].x_cord() > 0 and self.__viruses[i].y_cord() > 0:
                 cell = self.__viruses[i].move(self.__ffields)
-                self.__viruses[i].interaction(cell, self.__humans, self.__viruses, self.__doctors, self.__respirators)
+                self.__viruses[i].interaction(cell, self.__humans, self.__viruses, self.__doctors, self.__respirators, self.__vaccines, self.__medicines)
 
         self.show_cycle()  # Opcjonalnie
 
         for i in range(self.__doctor_num):
             cell = self.__doctors[i].move(self.__ffields)
-            self.__doctors[i].interaction(cell, self.__humans, self.__viruses, self.__doctors, self.__respirators)
+            self.__doctors[i].interaction(cell, self.__humans, self.__viruses, self.__doctors, self.__respirators, self.__vaccines, self.__medicines)
 
         self.show_cycle()  # Opcjonalnie
 
         for i in range(self.__chemist_num):
+            cell = self.__chemists[i].move(self.__ffields)
             self.__chemists[i].move(self.__ffields)
             self.__chemists[i].interaction(cell, self.__humans, self.__viruses, self.__doctors, self.__respirators, self.__vaccines, self.__medicines)
 
@@ -117,10 +120,6 @@ class Board:
         print("Ilosc wirusow: " + str(self.__virus_num))
         print("Ilosc lekarzy: " + str(self.__doctor_num))
         print("Ilosc chemikow: " + str(self.__chemist_num))
-        print("Podaj ilosc respiratorow: " + str(self.__respirator_num))
-
-    # -------------------------------------------------------------------------
-    # Zwraca pole powierzchni planszy
-    @staticmethod
-    def return_area(self):
-        return self.__xsize * self.__ysize
+        print("Ilosc respiratorow: " + str(self.__respirator_num))
+        print("Ilosc szczepionek: " + str(Vaccine.check_amount(self)))
+        print("Ilosc lekarstw: " + str(Medicine.check_amount(self)))

@@ -43,9 +43,15 @@ class Userclass: #(moze byc mainem, ale nie wiem teraz)
             print("Za duzo obiektow! Wprowadz Wartości jeszcze raz: ")
             self.__set_numbers()
 
-    # -------------------------------------------------------------------------
-    # Po upewnieniu sie ze wszystko w porzadku, tworzymy plansze! Tuz po stworzeniu planszy, przyjmujemy, ze
-    # poczatkowa liczba obiektow moze wynosic na kazdej kratce maksymalnie 1
-    @staticmethod
-    def __start(self):
+    def main(self):
+        self.__set_numbers(self)
+        self.__check_if_good(self)
         plansza = Board(self.__xsize, self.__ysize, self.__givehuman, self.__givevirus, self.__givedoctor, self.__givechemist, self.__giverespirator)
+        plansza.start()
+
+        decision = True
+
+        while decision == "y":
+            plansza.cycle()
+            print("Kontynuować symulację? y/n: ")
+            decision = input()

@@ -1,5 +1,3 @@
-from board import Board
-
 class Field:
 
     __fresh = True # atrybut informujacy czy kratki dopiero co powstaja, potrzebny do uwzglednienia maksymalnej liczby
@@ -9,13 +7,13 @@ class Field:
     # -------------------------------------------------------------------------
     # Zainicjowanie kratki- jej ID w postaci wspolrzednych, inicjujemy tez poczatkowa liczbe obiektow
     # Na niej sie znajdujacych- 0, czyli pusta kratka
-    def __init__(self, xcord, ycord):
+    def __init__(self, xcord, ycord, xsize, ysize):
         self.__xcord = xcord
         self.__ycord = ycord
         self.__status = [0, 0, 0, 0, 0, 0, 0, 0] #zmienna przechowujaca status obiektu, pierwsza cyfra - liczba obiektow na kratce
         self.__ID = [[-1, -1], [-1, -1], [-1, -1], [-1, -1], [-1, -1], [-1, -1], [-1, -1]] #przechowuje id obiektow
         self.__amount += 1
-        if self.__amount == Board.return_area(self):
+        if self.__amount == xsize * ysize:
             __fresh = False
 
     # -------------------------------------------------------------------------

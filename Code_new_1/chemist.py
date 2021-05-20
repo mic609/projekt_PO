@@ -8,8 +8,8 @@ class Chemist(MoveableObject):
 
     __amount = 0
 
-    def __init__(self, fields, ID):
-        super().__init__(ID)
+    def __init__(self, fields, ID, x, y):
+        super().__init__(x, y, ID)
         self.__amount += 1
         fields[super()._x_cord][super()._y_cord].change_obj_amount(1, "Chemist", super()._ID)
 

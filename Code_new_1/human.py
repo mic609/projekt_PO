@@ -7,13 +7,13 @@ class Human(MoveableObject):
 
     # -------------------------------------------------------------------------
     # Przypisujemy obiektowi wartosci poczatkowe
-    def __init__(self, HP, infected, immunity, age, resp, fields, ID): # immunity przechowuje od tej pory czas!
+    def __init__(self, HP, infected, immunity, age, resp, fields, ID, xsize, ysize): # immunity przechowuje od tej pory czas!
         self.__HP_points = HP
         self.__infected = infected
         self.__immunity = immunity
         self.__age = age
         self.__resp = resp
-        super().__init__(ID)
+        super().__init__(xsize, ysize, ID)
         self.__amount += 1
         fields[super()._x_cord][super()._y_cord].change_obj_amount(1, "Human", super()._ID)
 
