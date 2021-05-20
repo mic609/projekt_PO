@@ -1,4 +1,4 @@
-from movableObject import MovableObject
+from movable_object import MovableObject
 
 HEALTH_CAP = 100
 
