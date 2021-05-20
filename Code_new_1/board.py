@@ -118,5 +118,6 @@ class Board:
 
     # -------------------------------------------------------------------------
     # Zwraca pole powierzchni planszy
+    @staticmethod
     def return_area(self):
         return self.__xsize * self.__ysize

@@ -1,4 +1,4 @@
-#from Board import Board
+from board import Board
 
 class Field:
 
@@ -15,8 +15,8 @@ class Field:
         self.__status = [0, 0, 0, 0, 0, 0, 0, 0] #zmienna przechowujaca status obiektu, pierwsza cyfra - liczba obiektow na kratce
         self.__ID = [[-1, -1], [-1, -1], [-1, -1], [-1, -1], [-1, -1], [-1, -1], [-1, -1]] #przechowuje id obiektow
         self.__amount += 1
-        # if self.__amount == Board.return_area():
-        #     __fresh = False
+        if self.__amount == Board.return_area(self):
+            __fresh = False
 
     # -------------------------------------------------------------------------
     # Funkcja zmieniajaca status kratki - zmienia wartosc ogolnej liczby obiektow znajdujacej sie na niej
