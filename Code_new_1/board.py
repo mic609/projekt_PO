@@ -51,30 +51,11 @@ class Board:
     # w osobnej kratce
     def start(self):
 
-        for i in range(self.__human_num):
-            cell = self.__ffields[int(self.__humans[i].x_cord())][int(self.__humans[i].y_cord())]
-            while cell.answer() == False:
-                self.__humans[i].change_cord(self.__xsize, self.__ysize)
-
-        for i in range(self.__virus_num):
-            cell = self.__ffields[int(self.__viruses[i].x_cord())][int(self.__viruses[i].y_cord())]
-            while cell.answer() == False:
-                self.__viruses[i].change_cord(self.__xsize, self.__ysize)
-
-        for i in range(self.__doctor_num):
-            cell = self.__ffields[int(self.__doctors[i].x_cord())][int(self.__doctors[i].y_cord())]
-            while cell.answer() == False:
-                self.__doctors[i].change_cord(self.__xsize, self.__ysize)
-
-        for i in range(self.__chemist_num):
-            cell = self.__ffields[int(self.__chemists[i].x_cord())][int(self.__chemists[i].y_cord())]
-            while cell.answer() == False:
-                self.__chemists[i].change_cord(self.__xsize, self.__ysize)
-
-        for i in range(self.__respirator_num):
-            cell = self.__ffields[int(self.__respirators[i].x_cord())][int(self.__respirators[i].y_cord())]
-            while cell.answer() == False:
-                self.__respirators[i].change_cord(self.__xsize, self.__ysize)
+        for objects in [self.__doctors, self.__viruses, self.__humans, self.__chemists]:
+            for o in objects:
+                cell = self.__ffields[int(o.x_cord())][int(o.y_cord())]
+                while not cell.answer():
+                    o.change_cord(self.__xsize, self.__ysize)
 
     # -------------------------------------------------------------------------
     # Nadzoruje jeden cykl ruchu obiektow
