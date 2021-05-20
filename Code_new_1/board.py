@@ -24,6 +24,8 @@ class Board:
         self.__doctors = []
         self.__chemists = []
         self.__respirators = []
+        self.__vaccines = []
+        self.__medicines = []
 
         self.__ffields = [[Field(x, y) for y in range(self.__xsize)] for x in range(self.__ysize)]
 
@@ -104,6 +106,7 @@ class Board:
 
         for i in range(self.__chemist_num):
             self.__chemists[i].move(self.__ffields)
+            self.__chemists[i].interaction(cell, self.__humans, self.__viruses, self.__doctors, self.__respirators, self.__vaccines, self.__medicines)
 
         self.show_cycle()  # Opcjonalnie
 

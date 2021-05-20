@@ -20,3 +20,6 @@ class Vaccine:
         self.__y_cord = -1
         self.__amount -= 1
         fields.change_obj_amount(-1, "Vaccine", -1)
+
+    def check_amount(self):
+        return self.__amount

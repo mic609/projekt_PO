@@ -23,5 +23,8 @@ class Medicine:
     def destroy(self, fields):
         self.__x_cord = -1
         self.__y_cord = -1
-        self.amount -= 1
+        self.__amount -= 1
         fields.change_obj_amount(-1, "Medicine", -1)
+
+    def check_amount(self):
+        return self.__amount

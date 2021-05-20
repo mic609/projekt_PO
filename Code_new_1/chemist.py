@@ -1,5 +1,7 @@
 from field import Field
 from moveable_object import MoveableObject
+from vaccine import Vaccine
+from medicine import Medicine
 import random
 
 class Chemist(MoveableObject):
@@ -26,13 +28,21 @@ class Chemist(MoveableObject):
         cell.change_obj_amount(1, "Chemist", super()._ID)
         lastcell.change_obj_amount(-1, "Chemist", -1)
 
-        chosen = random.choice([0,1])
+    def interaction(self, cell, humans, viruses, doctors, respirators, vaccines, medicines):
 
-        if int(chosen) == 0:
-            self.generate_vaccine(cell)
-        elif int(chosen) == 1:
-            self.generate_medicine(cell)
+        if cell.check_status()[0] < 2:
+
+            chosen = random.choice([0, 1])
+
+            if int(chosen) == 0:
+                self.generate_vaccine(cell, vaccines)
+            elif int(chosen) == 1:
+                self.generate_medicine(cell, medicines)
 
         return cell
 
-    def generate_vaccine(self, cell):
+    def generate_vaccine(self, cell, cure_obj):
+        cure_obj.append(Vaccine(super()._x_cord, super()._y_cord, cure_obj.check_amount(), cell))
+
+    def generate_medicine(self, cell, cure_obj):
+        cure_obj.append(Medicine(super()._x_cord, super()._y_cord, cure_obj.check_amount(), cell))

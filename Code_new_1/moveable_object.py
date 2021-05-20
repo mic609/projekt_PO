@@ -20,7 +20,7 @@ class MoveableObject(ABC):
     # -------------------------------------------------------------------------
     # Dostepne interakcje jakie obiekt wykonuje
     @abstractmethod
-    def interaction(self, cell, humans, viruses, doctors, respirators):
+    def interaction(self, cell, humans, viruses, doctors, respirators, vaccines, medicines):
         pass
 
     # -------------------------------------------------------------------------

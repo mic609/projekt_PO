@@ -1,6 +1,5 @@
 from field import Field
 from moveable_object import MoveableObject
-import random #Usun pozniej
 
 class Human(MoveableObject):
 
@@ -41,7 +40,7 @@ class Human(MoveableObject):
     # -------------------------------------------------------------------------
     # Obiekt wchodzi w mozliwe interakcje
 
-    def interaction(self, cell, humans, viruses, doctors, respirators):#, medicines, vaccines): # NAPRAW!!!
+    def interaction(self, cell, humans, viruses, doctors, respirators, vaccines, medicines):#, medicines, vaccines): # NAPRAW!!!
 
         if cell.check_status()[1] > 1:  # Napotyka na innego czlowieka # 1 bo musza byc dwa obiekty klasy czlowiek
             i = cell.check_ID()[0][1]
@@ -50,29 +49,28 @@ class Human(MoveableObject):
         elif (cell.check_status())[2] > 0:  # Napotyka na wirusa
             i = cell.check_ID()[1][0]
             if self.__immunity == 0:
-                viruses[i].infect(self)
+                viruses[i].infect(cell, self)
             else:
-                viruses[i].destroy()
+                viruses[i].destroy(cell)
 
         elif (cell.check_status())[3] > 0: # Napotyka na lekarza
             i = cell.check_ID()[2][0]
             doctors[i].heal(self)
-            # doctors[i].heal(self)
 
         elif cell.check_status()[5] > 0: # Napotyka na respirator
             i = cell.check_ID()[4][0]
-            respirators[i].change_state(True)
+            respirators[i].change_status(True, self)
             self.__resp = True
 
         elif cell.check_status()[6] > 0: # Napotyka na szczepionke
             i = cell.check_ID()[5][0]
-            self.__immunity = vaccines[i].heal(self, self.__HP_points, self.__infected)
+            self.__immunity = vaccines[i].give_immunity(self.__immunity)
             vaccines[i].destroy(cell)
 
         elif cell.check_status()[7] > 0: # Napotyka na lekarstwo
             i = cell.check_ID()[6][0]
-            self.__HP_points = medicines[i].heal(self, self.__HP_points, self.__infected)[0] # Dobrze to jest???
-            self.__infected = medicines[i].heal(self, self.__HP_points, self.__infected)[1]
+            self.__HP_points = medicines[i].heal(self, self.__HP_points)[0] # Dobrze to jest???
+            self.__infected = medicines[i].heal(self, self.__HP_points)[1]
             medicines[i].destroy(cell)
 
     # -------------------------------------------------------------------------
@@ -115,6 +113,7 @@ class Human(MoveableObject):
 
     # -------------------------------------------------------------------------
     # Funkcja przywraca czlowiekowi w pelni zdrowie
+
     def full_restore_health(self, resp_call = False):
         if resp_call == False:
             self.__infected = False

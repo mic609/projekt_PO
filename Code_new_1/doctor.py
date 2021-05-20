@@ -46,7 +46,7 @@ class Doctor(MoveableObject):
     # -------------------------------------------------------------------------
     # Obiekt wchodzi w mozliwe interakcje
 
-    def interaction(self, cell, humans, viruses, doctors, respirators): #,medicines, vaccines): # NAPRAW!!!
+    def interaction(self, cell, humans, viruses, doctors, respirators, vaccines, medicines): #,medicines, vaccines): # NAPRAW!!!
 
         if cell.check_status()[1] > 0:  # Napotyka na czlowieka
 
