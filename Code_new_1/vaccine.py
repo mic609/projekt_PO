@@ -22,5 +22,5 @@ class Vaccine:
         fields.change_obj_amount(-1, "Vaccine", -1)
 
     @staticmethod
-    def check_amount(self):
-        return self.__amount
+    def check_amount():
+        return Vaccine.__amount

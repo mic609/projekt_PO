@@ -13,7 +13,7 @@ class Medicine:
     # -------------------------------------------------------------------------
     # Metoda zwraca czlowiekowi podwyzszona wartosc punktow HP
     def heal(self, HP):
-        if HP <= 90:
+        if HP < 90:
             return [HP + 10, False] # Drugi argument dotyczy tego czy czlowiek jest zarazony
         else:
             return [100, True]
@@ -27,5 +27,5 @@ class Medicine:
         fields.change_obj_amount(-1, "Medicine", -1)
 
     @staticmethod
-    def check_amount(self):
-        return self.__amount
+    def check_amount():
+        return Medicine.__amount

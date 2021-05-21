@@ -7,7 +7,7 @@ class Doctor(MoveableObject):
     def __init__(self, fields, ID, x, y):
         super().__init__(x, y, ID)
         self.__amount += 1
-        fields[super()._x_cord][super()._y_cord].change_obj_amount(1, "Doctor", super()._ID)
+        fields[self._x_cord][self._y_cord].change_obj_amount(1, "Doctor", self._ID)
 
     # -------------------------------------------------------------------------
     # Lekarz leczy wybranego czlowieka
@@ -66,4 +66,3 @@ class Doctor(MoveableObject):
             else:
                 j = cell.check_ID()[0][1]
                 self.respirator_out(respirators[i], humans[j])
-

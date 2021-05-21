@@ -7,23 +7,23 @@ class Virus(MoveableObject):
     def __init__(self, fields, ID, x, y):
         super().__init__(x, y, ID)
         self.__amount += 1
-        fields[super()._x_cord][super()._y_cord].change_obj_amount(1, "Virus", super()._ID)
+        fields[self._x_cord][self._y_cord].change_obj_amount(1, "Virus", self._ID)
 
     # -------------------------------------------------------------------------
     # Nadzoruje proces ruchu obiektu
 
     def move(self, fields):
         super().where_to_move()
-        lastcell = fields[int(super()._x_cord())][int(super()._y_cord())]
-        cell = fields[int(super()._x_move_to())][int(super()._y_move_to())]
+        lastcell = fields[self._x_cord][self._y_cord]
+        cell = fields[self._x_move_to][self._y_move_to]
 
         while (cell.answer() == False):
             super().where_to_move()  # Obiekt zmienia swoj ruch
             cell = fields[int(super()._x_move_to())][int(super()._y_move_to())]
 
-        super()._x_cord = super()._x_move_to
-        super()._y_cord = super()._y_move_to
-        cell.change_obj_amount(1, "Virus", super()._ID)
+        self._x_cord = self._x_move_to
+        self._y_cord = self._y_move_to
+        cell.change_obj_amount(1, "Virus", self._ID)
         lastcell.change_obj_amount(-1, "Virus", -1)
         return cell
 
@@ -38,20 +38,19 @@ class Virus(MoveableObject):
                 i = cell.check_ID()[0][0]
             else:
                 i = cell.check_ID()[0][1]
-
             self.infect(humans[i], cell)
 
     # -------------------------------------------------------------------------
     # Metoda zarazi wybranego czlowieka
 
     def infect(self, cell, human):
-        human.infect(human, cell, self)
+        human.infect_hum(human, cell, self)
 
     # -------------------------------------------------------------------------
     # Unicestwi wirusa znajdujacego sie na wybranej kratce
 
     def destroy(self, fields):
-        super()._x_cord = -1
-        super()._y_cord = -1
+        self._x_cord = -1
+        self._y_cord = -1
         self.__amount -= 1
         fields.change_obj_amount(-1, "Virus", -1)
