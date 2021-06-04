@@ -1,6 +1,4 @@
-# CHECKED
-
-from board import Board
+from PACKAGE import Board
 
 class Userclass:
 
@@ -51,13 +49,11 @@ class Userclass:
         Userclass.__set_numbers()
         Userclass.__check_if_good()
         plansza = Board(Userclass.__xsize, Userclass.__ysize, Userclass.__givehuman, Userclass.__givevirus, Userclass.__givedoctor, Userclass.__givechemist, Userclass.__giverespirator)
-        print("breakpoint")
         plansza.start()
 
         decision = "y"
 
         while decision == "y":
-            print("acihf")
             plansza.cycle()
             print("Kontynuować symulację? y/n: ")
             decision = input()

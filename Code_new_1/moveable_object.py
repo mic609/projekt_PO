@@ -16,7 +16,7 @@ class MoveableObject(ABC):
     # -------------------------------------------------------------------------
     # Nadzoruje proces ruchu obiektu
     @abstractmethod
-    def move(self, fields):
+    def move(self, fields, xsize, ysize):
         pass
 
     # -------------------------------------------------------------------------
@@ -31,16 +31,22 @@ class MoveableObject(ABC):
         while True:
             self._x_cord = random.randint(0, x - 1)
             self._y_cord = random.randint(0, y - 1)
-            if 0 < self._x_cord < self._x_range and 0 < self._y_cord < self._y_range:
+            if 0 <= self._x_cord <= self._x_range and 0 <= self._y_cord <= self._y_range:
                 break
 
     # -------------------------------------------------------------------------
     # Metoda losuje, gdzie dany obiekt ma sie ruszyc
-    def where_to_move(self):
+    def where_to_move(self, xsize, ysize):
+
 
         self._x_move_to = random.choice([self._x_cord - 1, self._x_cord, self._x_cord + 1])
-        self._y_move_to = random.choice([self._y_cord - 1, self._y_cord, self._y_cord + 1])
 
+        while self._x_move_to < 1 or self._x_move_to > xsize-2:
+            self._x_move_to = random.choice([self._x_cord - 1, self._x_cord, self._x_cord + 1])
+
+        self._y_move_to = random.choice([self._y_cord - 1, self._y_cord, self._y_cord + 1])
+        while self._y_move_to < 1 or self._y_move_to > ysize-2:
+            self._y_move_to = random.choice([self._y_cord - 1, self._y_cord, self._y_cord + 1])
 
     # -------------------------------------------------------------------------
     def x_cor(self):
@@ -55,3 +61,6 @@ class MoveableObject(ABC):
 
     def y_move(self):
         return self._y_move_to
+
+    def check_id(self):
+        return self._ID

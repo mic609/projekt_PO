@@ -1,7 +1,7 @@
 import random
-from field import Field
+from PACKAGE.field import Field
 
-class Respirator():
+class Respirator:
 
     __amount = 0
 
@@ -31,8 +31,11 @@ class Respirator():
         self.__y_cord = random.randint(0, y - 1)
 
     # -------------------------------------------------------------------------
-    def x_cord(self):
+    def x_cor(self):
         return self.__x_cord
 
-    def y_cord(self):
+    def y_cor(self):
         return self.__y_cord
+
+    def check_id(self):
+        return self.__ID

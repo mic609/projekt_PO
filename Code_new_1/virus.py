@@ -1,4 +1,4 @@
-from moveable_object import MoveableObject
+from PACKAGE.moveable_object import MoveableObject
 
 class Virus(MoveableObject):
 
@@ -12,14 +12,14 @@ class Virus(MoveableObject):
     # -------------------------------------------------------------------------
     # Nadzoruje proces ruchu obiektu
 
-    def move(self, fields):
-        super().where_to_move()
+    def move(self, fields, xsize, ysize):
+        super().where_to_move(xsize, ysize)
         lastcell = fields[self._x_cord][self._y_cord]
         cell = fields[self._x_move_to][self._y_move_to]
 
         while (cell.answer() == False):
-            super().where_to_move()  # Obiekt zmienia swoj ruch
-            cell = fields[int(super()._x_move_to())][int(super()._y_move_to())]
+            super().where_to_move(xsize, ysize)  # Obiekt zmienia swoj ruch
+            cell = fields[self._x_move_to][self._y_move_to]
 
         self._x_cord = self._x_move_to
         self._y_cord = self._y_move_to
@@ -43,7 +43,7 @@ class Virus(MoveableObject):
     # -------------------------------------------------------------------------
     # Metoda zarazi wybranego czlowieka
 
-    def infect(self, cell, human):
+    def infect(self, human, cell):
         human.infect_hum(human, cell, self)
 
     # -------------------------------------------------------------------------

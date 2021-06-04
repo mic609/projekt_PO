@@ -1,4 +1,4 @@
-from moveable_object import MoveableObject
+from PACKAGE.moveable_object import MoveableObject
 
 class Doctor(MoveableObject):
 
@@ -24,20 +24,21 @@ class Doctor(MoveableObject):
     # -------------------------------------------------------------------------
     # Nadzoruje proces ruchu obiektu, zwraca kratke na ktora wchodzi
 
-    def move(self, fields):
+    def move(self, fields, xsize, ysize):
 
-        super().where_to_move()
-        lastcell = fields[int(super()._x_cord())][int(super()._y_cord())]
-        cell = fields[int(super()._x_move_to())][int(super()._y_move_to())]
+        super().where_to_move(xsize, ysize)
+        lastcell = fields[self._x_cord][self._y_cord]
+        cell = fields[self._x_move_to][self._y_move_to]
+        list = cell.check_status()
 
-        if cell.check_status[5] == 0: # Nie napotyka na kratke z respiratorem
+        if list[5] == 0: # Nie napotyka na kratke z respiratorem
             while (cell.answer() == False):
-                super().where_to_move()  # Obiekt zmienia swoj ruch
-                cell = fields[int(super()._x_move_to())][int(super()._y_move_to())]
+                super().where_to_move(xsize, ysize)  # Obiekt zmienia swoj ruch
+                cell = fields[self._x_move_to][self._x_move_to]
 
-            super()._x_cord = super()._x_move_to
-            super()._y_cord = super()._y_move_to
-            cell.change_obj_amount(1, "Doctor", super()._ID)
+            self._x_cord = self._x_move_to
+            self._y_cord = self._y_move_to
+            cell.change_obj_amount(1, "Doctor", self._ID)
             lastcell.change_obj_amount(-1, "Doctor", -1)
             return cell
         else: # Napotyka na kratke z respiratorem

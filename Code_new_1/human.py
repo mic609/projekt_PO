@@ -1,7 +1,8 @@
 # CHECKED
 
-from moveable_object import MoveableObject
-from field import Field
+from PACKAGE.moveable_object import MoveableObject
+from PACKAGE.virus import Virus
+from PACKAGE.field import Field
 
 class Human(MoveableObject):
 
@@ -17,20 +18,20 @@ class Human(MoveableObject):
         self.__resp = resp
         super().__init__(xsize, ysize, ID)
         self.__amount += 1
-        fields[self._x_cord-1][self._y_cord-1].change_obj_amount(1, "Human", self._ID)
+        fields[self._x_cord][self._y_cord].change_obj_amount(1, "Human", self._ID) # ZMIANA!!!
 
     # -------------------------------------------------------------------------
     # Nadzoruje proces ruchu obiektu, zwraca kratke na ktora wchodzi
 
-    def move(self, fields):
+    def move(self, fields, xsize, ysize):
 
         if self.__resp == False:
-            super().where_to_move()
+            super().where_to_move(xsize, ysize)
             lastcell = fields[self._x_cord][self._y_cord]
             cell = fields[self._x_move_to][self._y_move_to]
 
             while (cell.answer() == False):
-                super().where_to_move()  # Obiekt zmienia swoj ruch
+                super().where_to_move(xsize, ysize)  # Obiekt zmienia swoj ruch
                 cell = fields[self._y_move_to][self._y_move_to]
 
             self._x_cord = self._x_move_to
@@ -45,15 +46,14 @@ class Human(MoveableObject):
     def interaction(self, cell, humans, viruses, doctors, respirators, vaccines, medicines):
 
         if cell.check_status()[1] > 1:  # Napotyka na innego czlowieka
-            i = (cell.check_ID())[0][1]
+            i = cell.check_ID()[0][1]
             self.infect_hum(humans[i], cell)
 
         elif (cell.check_status())[2] > 0:  # Napotyka na wirusa
             i = cell.check_ID()[1][0]
             if i != -1:
-                print("Wirus: " + str(i))
                 if self.__immunity == 0:
-                    viruses[i].infect(cell, self)
+                    viruses[i].infect(self, cell)
                 else:
                     viruses[i].destroy(cell)
 
@@ -149,12 +149,3 @@ class Human(MoveableObject):
 
     # -------------------------------------------------------------------------
     # Funkcja zwraca ID czlowieka
-    def check_id(self):
-        return super()._ID
-
-    ##########################################
-
-    def x_move(self):
-        return super()._x_move_to
-    def y_move(self):
-        return super()._y_move_to

@@ -34,7 +34,7 @@ class Field:
 
         if sign == -1 and self.__status[0]> 0:
             self.__status[0] += sign
-        elif sign == 1 and self.__status[0] < 2:
+        elif sign == 1:
             self.__status[0] += sign
 
         if type == "Human":
@@ -56,7 +56,13 @@ class Field:
     # funkcja pomocnicza dla change_obj_amount(), zapisuje ilosc konkretnych obiektow
 
     def __ifobj(self, sign, ID, nr):
-        self.__status[nr] += sign
+
+        if sign == -1 and self.__status[nr]> 0:
+            self.__status[nr] += sign
+        elif sign == -1 and self.__status[nr] == 0:
+            self.__status[nr] = 0
+        else:
+            self.__status[nr] += sign
 
         if sign == 1: # Dodajemy ID
             if self.__ID[1][0] >= 0:
@@ -70,16 +76,28 @@ class Field:
                 self.__ID[1][0] = ID
 
     # -------------------------------------------------------------------------
-    # Zwraca informacje czy mozna na dana kratke wejsc
+    # Zwraca informacje czy mozna na dana kratke wejsc (poczatek programu)
+
+    def answer_first(self):  # dawna funkcja- def return_no_place(self):
+
+        if self.__fresh is True:
+            if self.__status[0] > 1:
+                return False
+            else:
+                return True
 
     def answer(self):  # dawna funkcja- def return_no_place(self):
+
         if self.__fresh is True:
-            if self.__status[0] == 1:
+            if self.__status[0] >= 1:
                 return False  # Funkcja zwraca tu jedynie wartosc domyslna, ktora nie daje efektu???
+            else:
+                return True
         else:
             if self.__status[0] == 2:
                 return False
-
+            else:
+                return True
     # -------------------------------------------------------------------------
     # Funkcja ktora zwraca aktualny status kratki (zwroci liste licznikow)
 
