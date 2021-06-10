@@ -280,7 +280,7 @@ class Human(MoveableObject):
             print(self.__resp)
             print("\n")
 
-        plik = open("Dane.txt", "a")
+        plik = open("Dane.txt", "a", encoding="utf-8")
 
         if plik.writable():
             plik.write("\n\n")
