@@ -216,7 +216,7 @@ class Board:
         print("Ilosc szczepionek: " + str(Vaccine.check_amount()))
         print("Ilosc lekarstw: " + str(Medicine.check_amount()))
 
-        plik = open("Dane.txt", "a")
+        plik = open("Dane.txt", "a", encoding = "utf-8")
 
         if plik.writable():
 
@@ -281,7 +281,7 @@ class Board:
             i = 0
             print(end='\n')
 
-        plik = open("Dane.txt", "a", encoding="utf-8")
+        plik = open("Dane.txt", "a")
         plik.write("\nPo ruchu wszystkich obiektów:\n\n")
 
         j = self.__xsize - 1
