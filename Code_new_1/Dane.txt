@@ -1,0 +1,69 @@
+---------------------------------------------------------
+---------------------------------------------------------
+---------------------------------------------------------
+
+Wartoœæ x: 60
+Wartoœæ y: 360
+Iloœæ ludzi: 7000
+Iloœæ wirusow: 1000
+Iloœæ lekarzy: 300
+Iloœæ chemikow: 100
+Iloœæ respiratorow: 50
+
+---------------------------------------------------------
+DZIEÑ 806
+
+Ilosc lekarzy: 300
+Ilosc chemikow: 100
+Ilosc respiratorow: 50
+
+Ilosc ludzi: 1638
+Zarazonych obecnie: 5
+Odpornych obecnie: 75
+Na respiratorze: 3
+Ilosc wirusow: 0
+Ilosc szczepionek: 606
+Ilosc lekarstw: 585
+
+---------------------------------------------------------
+---------------------------------------------------------
+---------------------------------------------------------
+
+Wartoœæ x: 60
+Wartoœæ y: 360
+Iloœæ ludzi: 7000
+Iloœæ wirusow: 1000
+Iloœæ lekarzy: 300
+Iloœæ chemikow: 100
+Iloœæ respiratorow: 50
+
+---------------------------------------------------------
+DZIEÑ 1135
+
+Ilosc lekarzy: 300
+Ilosc chemikow: 100
+Ilosc respiratorow: 50
+
+Ilosc ludzi: 1812
+Zarazonych obecnie: 5
+Odpornych obecnie: 86
+Na respiratorze: 2
+Ilosc wirusow: 0
+Ilosc szczepionek: 565
+Ilosc lekarstw: 643
+
+---------------------------------------------------------
+DZIEÑ 1136
+
+Ilosc lekarzy: 300
+Ilosc chemikow: 100
+Ilosc respiratorow: 50
+
+Ilosc ludzi: 1812
+Zarazonych obecnie: 5
+Odpornych obecnie: 82
+Na respiratorze: 2
+Ilosc wirusow: 0
+Ilosc szczepionek: 565
+Ilosc lekarstw: 641
+

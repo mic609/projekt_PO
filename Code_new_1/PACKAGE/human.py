@@ -4,48 +4,54 @@ from PACKAGE.moveable_object import MoveableObject
 from PACKAGE.virus import Virus
 from PACKAGE.field import Field
 
+# ILOSC METOD: 12 (w tym konstruktor)
+
 class Human(MoveableObject):
 
     __amount = 0
 
     # -------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     # Przypisujemy obiektowi wartosci poczatkowe
-    def __init__(self, HP, infected, immunity, age, resp, fields, ID, x, y): # immunity przechowuje od tej pory czas!
+
+    def __init__(self, HP, infected, immunity, age, resp, fields, ID, x, y):
         self.__HP_points = HP
         self.__infected = infected
-        self.__immunity = immunity
+        self.__immunity = immunity # czas odpornosci
         self.__age = age
         self.__resp = resp
         super().__init__(x, y, ID)
 
-        Human.__amount += 1 #ZROB TAK WSZEDZIE!!!
+        Human.__amount += 1
 
-        fields[self._x_cord][self._y_cord].change_obj_amount(1, "Human", self._ID) # ZMIANA!!!
+        fields[self._x_cord][self._y_cord].change_obj_amount(1, "Human", self._ID)
 
     # -------------------------------------------------------------------------
-    # Nadzoruje proces ruchu obiektu, zwraca kratke na ktora wchodzi
+    # -------------------------------------------------------------------------
+    # Nadzoruje proces ruchu obiektu
 
     def move(self, fields, xsize, ysize):
 
         lastcell = fields[self._x_cord][self._y_cord]
 
+        # Jesli czlowiek nie jest podlaczony do respiratora, ruszy sie:
         if self.__resp == False:
 
-            # print("super().neighbour(fields, xsize, ysize, self._x_cord, self._y_cord): ")
-            # print(super().neighbour(fields, xsize, ysize, self._x_cord, self._y_cord))
+            # Obiekt sie ruszy, jesli ma miejsce. Jesli bylby otoczony, nie ruszy sie:
             if super().neighbour(fields, xsize, ysize, self._x_cord, self._y_cord) == False:
 
                 lastcell.change_obj_amount(-1, "Human", -1)
                 super().where_to_move(xsize, ysize)
                 cell = fields[self._x_move_to][self._y_move_to]
 
+                # Jesli obiekt bedzie chcial sie ruszyc tam, gdzie nie ma miejsca, zmien kordynaty:
                 while (cell.answer() == False):
                     super().where_to_move(xsize, ysize)  # Obiekt zmienia swoj ruch
                     cell = fields[self._x_move_to][self._y_move_to]
 
+                # Ostateczne zmiany:
                 self._x_cord = self._x_move_to
                 self._y_cord = self._y_move_to
-
                 cell.change_obj_amount(1, "Human", self._ID)
 
                 return cell
@@ -53,116 +59,104 @@ class Human(MoveableObject):
             else:
                 return lastcell
 
-        else: # DODANE
+        else:
             return lastcell
 
+    # -------------------------------------------------------------------------
     # -------------------------------------------------------------------------
     # Obiekt wchodzi w mozliwe interakcje
 
     def interaction(self, cell, humans, viruses, doctors, respirators, vaccines, medicines):
 
-        if cell.check_status()[1] > 1:  # Napotyka na innego czlowieka
+        # Napotyka na innego czlowieka
+        if cell.check_status()[1] > 1:
 
-            # print("Natrafilem na innego czlowieka: " )
-            # print(self._ID)
-
+            # Jesli jestes zarazony, zaraz innego czlowieka
             if self.__infected == True:
-
                 i = cell.check_ID()[0][1]
-
                 self.infect_hum(humans[i], cell)
 
-        elif cell.check_status()[2] > 0:  # Napotyka na wirusa
-            # print("ZARAZAM")
+        # Napotyka na wirusa
+        elif cell.check_status()[2] > 0:
+
             i = cell.check_ID()[1][0]
 
-            # print("Natrafilem na wirusa: ")
-            # print(self._ID)
-
+            # Jesli obiekt istnieje:
             if i != -1:
-                # print("wirus i: " + str(i))
+
+                # Zaraz czlowieka, jesli nie jest odporny:
                 if self.__immunity == 0:
-                    # print("HUMAN self: ")
-                    # print(self)
                     viruses[i].infect(self, cell)
 
-                    # viruses[i].destroy(cell)
-
+                # Jesli czlowiek jest odporny, zniszcz wirusa:
                 else:
                     viruses[i].destroy(cell)
 
-        elif cell.check_status()[3] > 0: # Napotyka na lekarza
+        # Napotyka na lekarza
+        elif cell.check_status()[3] > 0:
             i = cell.check_ID()[2][0]
 
-            # print("Natrafilem na lekarza: ")
-            # print(self._ID)
-
+            # Lecz czlowieka (jesli chory)
             if i != -1:
                 doctors[i].heal(self)
 
-        elif cell.check_status()[5] > 0: # Napotyka na respirator
+        # Napotyka na respirator
+        elif cell.check_status()[5] > 0:
+
             i = cell.check_ID()[4][0]
 
-            # print("Natrafilem na respirator: ")
-            # print(self._ID)
-
+            # Jesli czlowiek jest chory, rozwaz podlaczenie do respiratora:
             if (i != -1 and self.__infected == True and self.__resp != True):
-                # print("ZOSTALEM PODLACZONY! ")
                 self.__resp = respirators[i].change_status(True, self, self.__HP_points)
 
-        elif cell.check_status()[6] > 0: # Napotyka na szczepionke
+        # Napotyka na szczepionke
+        elif cell.check_status()[6] > 0:
+
             i = cell.check_ID()[5][0]
 
-            # print("Natrafilem na szczepionke: ")
-            # print(self._ID)
-
+            # Nabadz odpornosci dzieki szczepionce
             if i != -1:
                 self.__immunity = vaccines[i].give_immunity(self.__immunity)
                 vaccines[i].destroy(cell)
 
-        elif cell.check_status()[7] > 0: # Napotyka na lekarstwo
-            i = cell.check_ID()[6][0]
+        # Napotyka na lekarstwo
+        elif cell.check_status()[7] > 0:
 
-            # print("Natrafilem na lekarstwo: ")
-            # print(self._ID)
+            i = cell.check_ID()[6][0]
 
             if i != -1:
 
+                # Dodaj 10 punktow HP
                 self.__HP_points = medicines[i].heal(self.__HP_points)
 
-                if self.__infected == True:
+                # Jesli czlowiek, dzieki lekarstwu odzyska pelnie zdrowia, nadaj mu drugotrwala odpornosc:
+                if self.__infected == True and self.__HP_points == 100:
                     self.__infected = False
                     self.__immunity = 30
 
                 medicines[i].destroy(cell)
 
-
-        # elif cell.check_status()[4] > 0:
-        #     print("Natrafilem na chemika")
-        #     print(self._ID)
-        # else:
-        #     print("Na nic nie natrafilem")
-        #     print(self._ID)
-
+    # -------------------------------------------------------------------------
     # -------------------------------------------------------------------------
     # Funkcja obniza HP czlowieka w zaleznosci od wieku
 
-    def reduce_health(self, cell): # COS TU NIE GRA!!!
+    def reduce_health(self, cell):
 
-        # print("self.__immunity: " + str(self.__immunity))
-        # print("self.__resp: " + str(self.__resp))
-        # print("self.__infected: " + str(self.__infected))
-
+        # Jesli czlowiek jest chory, nie jest odporny i nie jest podlaczony do respiratora, obniz jego punkty HP (w zaleznosci od wieku)
         if self.__immunity == 0 and self.__resp == False and self.__infected == True:
-            # print("JESTEM NIE PRZEJMUJ SIE!")
+
             reduce = 3
             expected_age = 0
 
             while reduce <= 9:
                 if self.__age >= expected_age and self.__age <= expected_age + 25:
+
+                    # Jesli czlowiek dalej zyje po obnizeniu puktow HP:
                     if self.__HP_points > reduce:
                         self.__HP_points -= reduce
                         break
+
+                    # Jesli finalnie umrze:
                     else:
                         self.__HP_points = 0
                         self.kill(cell)
@@ -172,74 +166,55 @@ class Human(MoveableObject):
                 reduce += 2
                 expected_age += 25
 
-        # print("HEALTH: " + str(self.__HP_points))
-        # print("ID: " + str(self._ID))
-
+    # -------------------------------------------------------------------------
     # -------------------------------------------------------------------------
     # Funkcja zaraza wybranego czlowieka, jesli czlowiek jest odporny, wirus zostaje unicestwiony
 
     def infect_hum(self, human, cell, virus = None):
 
-        # print("ZARAZAM 2")
-        # print("virus: ")
-        # print(virus)
-        # print(human.__immunity)
-
+        # Czlowiek zaraz czlowieka
         if human.__immunity == 0:
-
-            # print("HUMAN: ")
-            # print(human)
-
             human.__infected = True
-            # print("human infect: ")
-            # print(human.__infected)
-            #human.reduce_health(cell)
 
+        # Wirus zaraza czlowieka
         elif virus != None:
 
             if cell.check_ID()[1][0] >= 0:
                 virus.destroy(cell)
 
     # -------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     # Funkcja przywraca czlowiekowi w pelni zdrowie
 
     def full_restore_health(self, resp_call):
 
+        # Kiedy czlowiek jest zwyczajnie leczony:
         if resp_call == False:
-
-            # if self.__HP_points < 100:
-                # print("LEKARZ LECZY: ")
-                # print("ID: " + str(self._ID))
-                # print(self.__HP_points)
 
             if self.__HP_points < 100 and self.__infected == True:
                 self.__infected = False
                 self.__HP_points = 100
                 self.__immunity = 30
 
-            # print("PO: " + str(self.__HP_points))
-            # print("\n\n\n")
-
-        else: # Kiedy czlowiek jest odlaczany od respiratora
+        # Kiedy czlowiek jest odlaczany od respiratora:
+        else:
             self.__infected = False
             self.__HP_points = 100
+            self.__immunity = 30 ###
             self.__resp = False
 
-            # print("RESP CALL")
-            # print("Czlowiek nr: " + str(self._ID))
-            # print("Podlaczony do respiratora: ")
-            # print(self.__resp)
-            # print("\n\n\n")
-
+    # -------------------------------------------------------------------------
     # -------------------------------------------------------------------------
     # Funkcja nadzoruje czas trwania chwilowej odpornosci
+
     def decrease_immunity_time(self):
-        # print("IMMUNITY: "+str(self.__immunity))
         if self.__immunity > 0:
             self.__immunity -= 1
 
     # -------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     # Funkcja usmierca obiekt ludzki
+
     def kill(self, fields):
         self._x_cord = -1
         self._y_cord = -1
@@ -248,33 +223,23 @@ class Human(MoveableObject):
         self.__resp = False
         fields.change_obj_amount(-1, "Human", -1)
 
-    @staticmethod
-    def check_amount():
-        return Human.__amount
+    # -------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
+    # Funkcja zwraca informacje czy dany czlowiek jest chory
 
-
-
-
-
-    def human_current_infected(self):
-        # print("ID: " + str(self._ID))
-        # print("Zainfekowany: ")
-        # print(self.__infected)
-        # print("PUNKTY HP: ")
-        # print(self.__HP_points)
-        # print("ODPORNOSC: ")
-        # print(self.__immunity)
-        # print("RESPIRATOR: ")
-        # print(self.__resp)
-        # print("\n\n\n")
-
-        if self._x_cord != -1:
-            if self.__infected == True:
-                return 1
-            elif self.__infected == False:
+    def human_infected(self, when):
+        if when == "current":
+            if self._x_cord != -1:
+                if self.__infected == True:
+                    return 1
+                elif self.__infected == False:
+                    return 0
+            else:
                 return 0
-        else:
-            return 0
+
+    # -------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
+    # Funkcja zwraca informacje czy dany czlowiek jest odporny
 
     def human_current_immuned(self):
 
@@ -285,3 +250,58 @@ class Human(MoveableObject):
                 return 0
         else:
             return 0
+
+    # -------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
+    # Funkcja prezentuje karte pacjenta (ktora moze wyswietlic uzytkownik)
+
+    def chart(self):
+
+        print("\n")
+        print("JAN KOWALSKI: " + str(self._ID))
+
+        if self._x_cord == -1 and self._y_cord == -1:
+            print("Obiekt nie żyje :( Pomódlmy się za jego dusze, Amen", end='')
+            print("\n")
+        else:
+            print("Wsp x: ", end='')
+            print(self._y_cord)
+            print("Wsp y: ", end='')
+            print(self._x_cord)
+            print("Wiek: ", end='')
+            print(self.__age)
+            print("Zainfekowany: ", end='')
+            print(self.__infected)
+            print("Punkty HP: ", end='')
+            print(self.__HP_points)
+            print("Czas odpornosci: ", end='')
+            print(self.__immunity)
+            print("Podlaczony do respiratora: ", end='')
+            print(self.__resp)
+            print("\n")
+
+        plik = open("Dane.txt", "a")
+
+        if plik.writable():
+            plik.write("\n\n")
+            plik.write("    JAN KOWALSKI: " + str(self._ID)+"\n")
+            if self._x_cord == -1 and self._y_cord == -1:
+                plik.write("    Obiekt nie żyje :( Pomódlmy się za jego dusze, Amen\n")
+            else:
+                plik.write("    Wsp x: "+ str(self._y_cord) +"\n")
+                plik.write("    Wsp y: "+ str(self._x_cord) +"\n")
+                plik.write("    Wiek: "+ str(self.__age) +"\n")
+                plik.write("    Zainfekowany: "+ str(self.__infected) +"\n")
+                plik.write("    Punkty HP: "+ str(self.__HP_points) +"\n")
+                plik.write("    Czas odpornosci: "+ str(self.__immunity) +"\n")
+                plik.write("    Podlaczony do respiratora: "+ str(self.__resp) +"\n\n")
+
+        plik.close()
+
+    # -------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
+    # Zwraca ilosc obiektow
+
+    @staticmethod
+    def check_amount():
+        return Human.__amount
